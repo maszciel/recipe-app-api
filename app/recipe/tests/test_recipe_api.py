@@ -406,7 +406,7 @@ class PrivateRecipeAPITests(TestCase):
         self.assertIn(s1.data, res.data)
         self.assertIn(s2.data, res.data)
         self.assertNotIn(s3.data, res.data)
-    
+
     def test_filter_by_ingredients(self):
         """Test filtering recipes by ingredients"""
         r1 = create_recipe(user=self.user, title='Tuna salad')
@@ -417,7 +417,7 @@ class PrivateRecipeAPITests(TestCase):
         r2.ingredients.add(in2)
         r3 = create_recipe(user=self.user, title='Beef Goulash')
 
-        params = {'ingredients': f'{in1.id},{in1.id}'}
+        params = {'ingredients': f'{in1.id},{in2.id}'}
         res = self.client.get(RECIPES_URL, params)
 
         s1 = RecipeSerializer(r1)
@@ -453,7 +453,7 @@ class ImageUploadTests(TestCase):
             image_file.seek(0)
             payload = {'image': image_file}
             res = self.client.post(url, payload, format='multipart')
-        
+
         self.recipe.refresh_from_db()
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertIn('image', res.data)
